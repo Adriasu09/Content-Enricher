@@ -1,1 +1,18 @@
+# Python virtual environment
+.venv/
+
+# Python bytecode cache
+__pycache__/
+*.pyc
+
+# Environment variables / secrets
+.env
+
+# Pytest cache
+.pytest_cache/
+
+# PyCharm IDE config (machine-specific)
+.idea/
+
+# Claude Code instructions (local)
 CLAUDE.md
