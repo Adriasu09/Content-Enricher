@@ -3,6 +3,12 @@ from src.config.settings import WIKIPEDIA_LANG
 from bs4 import BeautifulSoup
 from src.models.article import Article
 
+class WikipediaConnectionError(Exception):
+    pass
+
+class ArticleNotFoundError(Exception):
+    pass
+
 class WikipediaService:
     BASE_URL = "https://{lang}.wikipedia.org/wiki/{topic}"
     HEADERS = {
@@ -12,7 +18,16 @@ class WikipediaService:
 
     def fetch_html(self, topic: str) -> str:
         url = self.BASE_URL.format(lang=WIKIPEDIA_LANG, topic=topic)
-        response = requests.get(url, headers=self.HEADERS, timeout=self.TIMEOUT)
+        try:
+            response = requests.get(url, headers=self.HEADERS, timeout=self.TIMEOUT)
+        except requests.exceptions.Timeout:
+            raise WikipediaConnectionError(f"Request timed out for topic: {topic}")
+        except requests.exceptions.ConnectionError:
+            raise WikipediaConnectionError("No internet connection.")
+
+        if response.status_code == 404:
+            raise ArticleNotFoundError(f"Article not found: {topic}")
+
         return response.text
 
     def parse_article(self, html: src) -> Article:
