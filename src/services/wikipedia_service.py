@@ -33,6 +33,9 @@ class WikipediaService:
     def parse_article(self, html: src) -> Article:
         soup = BeautifulSoup(html, "lxml") # Convierte el HTML en un árbol navegable
 
+        for tag in soup.find_all("sup"):
+            tag.decompose()
+
         #.get_text() --> extrae solo el texto sin las etiquetas
         title = soup.find("h1", id="firstHeading").get_text()
 

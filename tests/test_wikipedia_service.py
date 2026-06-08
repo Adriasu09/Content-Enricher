@@ -58,6 +58,28 @@ def test_parse_article_with_no_valid_paragraphs():
     assert article.title == "Vacío"
     assert len(article.paragraphs) == 0
 
+def test_parse_article_with_fewer_than_five_paragraphs():
+    # Arrange
+    service = WikipediaService()
+    short_html = """
+    <html>
+      <h1 id="firstHeading">Short Article</h1>
+      <div class="mw-parser-output">
+        <p>First paragraph.</p>
+        <p>Second paragraph.</p>
+        <p>Third paragraph.</p>
+      </div>
+    </html>
+    """
+
+    # Act
+    article = service.parse_article(short_html)
+
+    # Assert
+    assert article.title == "Short Article"
+    assert len(article.paragraphs) == 3
+    assert article.paragraphs[2] == "Third paragraph."
+
 def test_fetch_html_raises_on_404():
     # Arrange
     service = WikipediaService()
