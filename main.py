@@ -1,6 +1,6 @@
 from src.config.settings import WIKIPEDIA_LANG
 from src.services.wikipedia_scraper import WikipediaScraper
-from src.services.exceptions import ResourceNotFoundError, ScraperConnectionError
+from src.services.exceptions import ResourceNotFoundError, ScraperConnectionError, ScraperError
 
 
 def main():
@@ -17,6 +17,9 @@ def main():
         return
     except ScraperConnectionError:
         print("Could not connect to Wikipedia. Check your internet connection.")
+        return
+    except ScraperError:
+        print("Something went wrong while reading the article. Please try again.")
         return
 
     if not article.paragraphs:

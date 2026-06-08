@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock
 import requests
 
 from src.services.wikipedia_scraper import WikipediaScraper
-from src.services.exceptions import ResourceNotFoundError, ScraperConnectionError
+from src.services.exceptions import ResourceNotFoundError, ScraperConnectionError, ParseError
 
 SAMPLE_HTML = """
 <html>
@@ -110,3 +110,15 @@ def test_fetch_html_translates_connection_error():
             assert False, "Should have raised ScraperConnectionError"
         except ScraperConnectionError:
             pass
+
+def test_parse_raises_parse_error_on_unexpected_html():
+    # Arrange
+    scraper = WikipediaScraper()
+    broken_html = "<html><body><p>no heading here</p></body></html>"
+
+    # Act & Assert
+    try:
+        scraper.parse(broken_html)
+        assert False, "Should have raised ParseError"
+    except ParseError:
+        pass

@@ -1,4 +1,5 @@
 class Article:
+    """Represents a Wikipedia article and its versions."""
     def __init__(self, title: str, paragraphs: list[str]):
         self.title = title
         self.paragraphs = paragraphs

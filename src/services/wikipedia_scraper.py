@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 
 from src.models.article import Article
 from src.services.scraper import BaseScraper
+from src.services.exceptions import ParseError
 
 
 class WikipediaScraper(BaseScraper):
@@ -17,9 +18,14 @@ class WikipediaScraper(BaseScraper):
             tag.decompose()
 
         # .get_text() --> extrae solo el texto sin las etiquetas
-        title = soup.find("h1", id="firstHeading").get_text()
+        heading = soup.find("h1", id="firstHeading")
+        if heading is None:
+            raise ParseError("Could not find the article title in the page.")
+        title = heading.get_text()
 
         content = soup.find("div", class_="mw-parser-output")
+        if content is None:
+            raise ParseError("Could not find the article content in the page.")
         all_paragraphs = content.find_all("p")
 
         paragraphs = []
