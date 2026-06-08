@@ -1,16 +1,35 @@
-# This is a sample Python script.
-
-# Press Ctrl+F5 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press F9 to toggle the breakpoint.
+from src.services.wikipedia_service import (
+    WikipediaService,
+    ArticleNotFoundError,
+    WikipediaConnectionError,
+)
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+def main():
+    print("=== Content Enricher ===")
+    topic = input("Enter a topic to search on Wikipedia: ")
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    service = WikipediaService()
+
+    try:
+        html = service.fetch_html(topic)
+        article = service.parse_article(html)
+    except ArticleNotFoundError:
+        print(f"Article not found: '{topic}'. Try a different topic.")
+        return
+    except WikipediaConnectionError:
+        print("Could not connect to Wikipedia. Check your internet connection.")
+        return
+
+    if not article.paragraphs:
+        print(f"Article '{article.title}' exists but has no readable content.")
+        return
+
+    print(f"\n📄 {article.title}")
+    print("-" * 40)
+    for i, paragraph in enumerate(article.paragraphs, start=1):
+        print(f"\n[{i}] {paragraph}")
+
+
+if __name__ == "__main__":
+    main()
