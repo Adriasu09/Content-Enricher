@@ -1,23 +1,21 @@
-from src.services.wikipedia_service import (
-    WikipediaService,
-    ArticleNotFoundError,
-    WikipediaConnectionError,
-)
+from src.config.settings import WIKIPEDIA_LANG
+from src.services.wikipedia_scraper import WikipediaScraper
+from src.services.exceptions import ResourceNotFoundError, ScraperConnectionError
 
 
 def main():
     print("=== Content Enricher ===")
     topic = input("Enter a topic to search on Wikipedia: ")
 
-    service = WikipediaService()
+    scraper = WikipediaScraper(lang=WIKIPEDIA_LANG)
 
     try:
-        html = service.fetch_html(topic)
-        article = service.parse_article(html)
-    except ArticleNotFoundError:
+        html = scraper.fetch_html(topic)
+        article = scraper.parse(html)
+    except ResourceNotFoundError:
         print(f"Article not found: '{topic}'. Try a different topic.")
         return
-    except WikipediaConnectionError:
+    except ScraperConnectionError:
         print("Could not connect to Wikipedia. Check your internet connection.")
         return
 
