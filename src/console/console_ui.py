@@ -18,3 +18,21 @@ class ConsoleUI:
             if language in SUPPORTED_LANGUAGES:
                 return language
             print(f"Unsupported language. Choose one of: {SUPPORTED_LANGUAGES}")
+
+    def render_article(self, article) -> None:
+        """Display an article's title and paragraphs."""
+        print(f"\n📄 {article.title}")
+        print("-" * 40)
+        for i, paragraph in enumerate(article.paragraphs, start=1):
+            print(f"\n[{i}] {paragraph}")
+
+    def show_message(self, message: str) -> None:
+        """Display a simple message to the user."""
+        print(message)
+
+    def ask_menu_option(self) -> str:
+        """Show the action menu and return the chosen option."""
+        print("\nWhat would you like to do?")
+        print("[1] Enrich the content with AI")
+        print("[0] Exit")
+        return input("Choose an option: ").strip()

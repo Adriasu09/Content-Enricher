@@ -1,35 +1,14 @@
 from src.config.settings import WIKIPEDIA_LANG
+from src.console.console_ui import ConsoleUI
 from src.services.wikipedia_scraper import WikipediaScraper
-from src.services.exceptions import ResourceNotFoundError, ScraperConnectionError, ScraperError
+from src.app import App
 
 
 def main():
-    print("=== Content Enricher ===")
-    topic = input("Enter a topic to search on Wikipedia: ")
-
+    console = ConsoleUI()
     scraper = WikipediaScraper(lang=WIKIPEDIA_LANG)
-
-    try:
-        html = scraper.fetch_html(topic)
-        article = scraper.parse(html)
-    except ResourceNotFoundError:
-        print(f"Article not found: '{topic}'. Try a different topic.")
-        return
-    except ScraperConnectionError:
-        print("Could not connect to Wikipedia. Check your internet connection.")
-        return
-    except ScraperError:
-        print("Something went wrong while reading the article. Please try again.")
-        return
-
-    if not article.paragraphs:
-        print(f"Article '{article.title}' exists but has no readable content.")
-        return
-
-    print(f"\n📄 {article.title}")
-    print("-" * 40)
-    for i, paragraph in enumerate(article.paragraphs, start=1):
-        print(f"\n[{i}] {paragraph}")
+    app = App(console=console, scraper=scraper)
+    app.run()
 
 
 if __name__ == "__main__":
