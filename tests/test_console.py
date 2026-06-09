@@ -1,5 +1,8 @@
 from src.console.console_ui import ConsoleUI
 
+from src.app import App
+from src.models.article import Article
+
 
 def test_ask_topic_repeats_until_valid(monkeypatch):
     # Arrange
@@ -24,10 +27,6 @@ def test_ask_language_rejects_unsupported(monkeypatch):
 
     # Assert
     assert result == "es"
-
-from src.app import App
-from src.models.article import Article
-
 
 class FakeConsole:
     """A fake console that feeds fixed answers and records what was shown."""
