@@ -28,3 +28,11 @@ class AIConnectionError(AIServiceError):
 
 class AIResponseError(AIServiceError):
     """Raised when the AI service returns an error response."""
+
+
+class TranslationError(Exception):
+    """Base exception for all translation errors."""
+
+
+class UnsupportedLanguageError(TranslationError):
+    """Raised when the target language is not supported by the translator."""
