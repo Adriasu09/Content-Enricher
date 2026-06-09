@@ -1,6 +1,7 @@
 from src.console.console_ui import ConsoleUI
 from src.app import App
 from src.models.article import Article
+from unittest.mock import MagicMock
 
 
 def test_ask_topic_repeats_until_valid(monkeypatch):
@@ -66,7 +67,7 @@ def test_app_flow_shows_article_and_exits():
     # Arrange
     console = FakeConsole()
     scraper = FakeScraper()
-    app = App(console=console, scraper=scraper)
+    app = App(console=console, scraper=scraper, ai_service=MagicMock())
 
     # Act
     app.run()
