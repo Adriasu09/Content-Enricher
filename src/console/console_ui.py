@@ -36,3 +36,9 @@ class ConsoleUI:
         print("[1] Enrich the content with AI")
         print("[0] Exit")
         return input("Choose an option: ").strip()
+
+    def render_enriched(self, enriched_text: str) -> None:
+        """Display the AI-enriched content."""
+        print("\n✨ Enriched content")
+        print("-" * 40)
+        print(enriched_text)
