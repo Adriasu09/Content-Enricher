@@ -35,6 +35,7 @@ class ConsoleUI:
         """Show the action menu and return the chosen option."""
         print("\nWhat would you like to do?")
         print("[1] Enrich the content with AI")
+        print("[2] Translate the content")
         print("[0] Exit")
         return input("Choose an option: ").strip()
 
@@ -43,3 +44,9 @@ class ConsoleUI:
         print("\n✨ Enriched content")
         print("-" * 40)
         print(enriched_text)
+
+    def render_translated(self, translated_text: str) -> None:
+        """Display the translated content."""
+        print("\n✨ Translated content")
+        print("-" * 40)
+        print(translated_text)

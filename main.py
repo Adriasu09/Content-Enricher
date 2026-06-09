@@ -2,6 +2,7 @@ from src.config.settings import WIKIPEDIA_LANG, GROQ_API_KEY, AI_BASE_URL, AI_MO
 from src.console.console_ui import ConsoleUI
 from src.services.wikipedia_scraper import WikipediaScraper
 from src.services.ai_service import AIService
+from src.services.translate_service import TranslateService
 from src.services.exceptions import AIAuthError
 from src.app import App
 
@@ -16,7 +17,9 @@ def main():
         console.show_message(str(e))
         return
 
-    app = App(console=console, scraper=scraper, ai_service=ai_service)
+    translate_service = TranslateService()
+
+    app = App(console=console, scraper=scraper, ai_service=ai_service, translate_service=translate_service)
     app.run()
 
 
