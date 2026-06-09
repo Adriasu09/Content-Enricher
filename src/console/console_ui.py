@@ -1,5 +1,6 @@
 SUPPORTED_LANGUAGES = ["en", "es", "fr", "de", "it", "pt"]
 
+
 class ConsoleUI:
     """Handles all interaction with the user (input and output)."""
 
