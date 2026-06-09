@@ -1,5 +1,4 @@
 from src.console.console_ui import ConsoleUI
-
 from src.app import App
 from src.models.article import Article
 
