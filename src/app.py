@@ -18,7 +18,7 @@ class App:
             html = self.scraper.fetch_html(topic)
             article = self.scraper.parse(html)
         except ScraperError as e:
-            self.console.show_message(str(e))
+            self.console.show_message(e.format_message())
             return
 
         self.console.render_article(article)
@@ -46,7 +46,7 @@ class App:
         try:
             enriched = self.ai_service.enrich(original_text)
         except AIServiceError as e:
-            self.console.show_message(str(e))
+            self.console.show_message(e.format_message())
             return
         article.enriched_content = enriched
         self.console.render_enriched(enriched)
@@ -63,7 +63,7 @@ class App:
         try:
             translated = self.translate_service.translate(text, language)
         except TranslationError as e:
-            self.console.show_message(str(e))
+            self.console.show_message(e.format_message())
             return
         article.translated_content = translated
         self.console.render_translated(translated)
