@@ -1,4 +1,4 @@
-from src.services.exceptions import ScraperError, AIServiceError, TranslationError
+from src.services.exceptions import ScraperError, AIServiceError, TranslationError, ResourceNotFoundError
 
 
 class App:
@@ -14,12 +14,17 @@ class App:
         topic = self.console.ask_topic()
         language = self.console.ask_language()
 
-        try:
-            html = self.scraper.fetch_html(topic)
-            article = self.scraper.parse(html)
-        except ScraperError as e:
-            self.console.show_message(e.format_message())
-            return
+        while True:
+            try:
+                html = self.scraper.fetch_html(topic)
+                article = self.scraper.parse(html)
+                break  # éxito → salimos del bucle
+            except ResourceNotFoundError as e:  # recuperable → otro intento
+                self.console.show_message(e.format_message())
+                topic = self.console.ask_topic()
+            except ScraperError as e:  # el resto → avisar y salir
+                self.console.show_message(e.format_message())
+                return
 
         self.console.render_article(article)
         self._menu_loop(article, language)
