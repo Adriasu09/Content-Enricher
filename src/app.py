@@ -42,7 +42,7 @@ class App:
             self.console.show_message("Content is already enriched.")
             return
         self.console.show_message("Enriching content, please wait...")
-        original_text = article.title + "\n\n" + "\n\n".join(article.paragraphs) #Une los párrafos en un solo texto, separados por línea en blanco
+        original_text = article.original_text()
         try:
             enriched = self.ai_service.enrich(original_text)
         except AIServiceError as e:
@@ -56,14 +56,14 @@ class App:
             self.console.show_message("Content is already translated.")
             return
         self.console.show_message("Translating content, please wait...")
-        text = article.title + "\n\n" + "\n\n".join(article.paragraphs)
+        text = article.original_text()
         if article.enriched_content:
             text = text + "\n\n" + article.enriched_content
 
         try:
-            translate = self.translate_service.translate(text, language)
+            translated = self.translate_service.translate(text, language)
         except TranslationError as e:
             self.console.show_message(str(e))
             return
-        article.translated_content = translate
-        self.console.render_translated(translate)
+        article.translated_content = translated
+        self.console.render_translated(translated)

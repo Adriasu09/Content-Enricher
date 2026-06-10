@@ -24,12 +24,17 @@ class BaseScraper(ABC):
         try:
             response = requests.get(url, headers=self.headers, timeout=self.timeout)
         except requests.exceptions.Timeout:
-            raise ScraperConnectionError(f"Request timed out for: {query}")
+            raise ScraperConnectionError(f"Request timed out for: {query}") from None
         except requests.exceptions.ConnectionError:
-            raise ScraperConnectionError("Could not connect to the source.")
+            raise ScraperConnectionError("Could not connect to the source.") from None
+        except requests.exceptions.RequestException:
+            raise ScraperConnectionError("The request to the source failed.") from None
 
         if response.status_code == 404:
             raise ResourceNotFoundError(f"Resource not found: {query}")
+
+        if not response.ok:
+            raise ScraperConnectionError(f"The source returned an error (status {response.status_code}).")
 
         return response.text
 

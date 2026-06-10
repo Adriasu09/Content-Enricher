@@ -14,7 +14,7 @@ def main():
     try:
         ai_service = AIService(api_key=GROQ_API_KEY, base_url=AI_BASE_URL, model=AI_MODEL)
     except AIAuthError as e:
-        console.show_message(str(e))
+        console.show_message(f"{e} Set GROQ_API_KEY in your .env file.")
         return
 
     translate_service = TranslateService()

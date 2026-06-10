@@ -27,7 +27,7 @@ class AIService:
 
     def __init__(self, api_key: str, base_url: str, model: str, max_tokens: int | None = None):
         if not api_key:
-            raise AIAuthError("Missing AI API key. Set GROQ_API_KEY in your .env file.")
+            raise AIAuthError("Missing AI API key.")
         self.client = OpenAI(api_key=api_key, base_url=base_url)
         self.model = model
         self.max_tokens = max_tokens or self.DEFAULT_MAX_TOKENS
@@ -44,11 +44,11 @@ class AIService:
                 max_tokens=self.max_tokens,
             )
         except AuthenticationError:
-            raise AIAuthError("Invalid AI API key.")
+            raise AIAuthError("Invalid AI API key.") from None
         except (APIConnectionError, APITimeoutError):
-            raise AIConnectionError("Could not connect to the AI service.")
+            raise AIConnectionError("Could not connect to the AI service.") from None
         except (RateLimitError, APIError):
-            raise AIResponseError("The AI service returned an error. Please try again.")
+            raise AIResponseError("The AI service returned an error. Please try again.") from None
 
         content = response.choices[0].message.content
         if content is None:

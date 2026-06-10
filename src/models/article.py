@@ -6,3 +6,7 @@ class Article:
         self.enriched_content = ""
         self.translated_content = ""
         self.summary = ""
+
+    def original_text(self) -> str:
+        """Return title and paragraphs as a single plain-text block."""
+        return self.title + "\n\n" + "\n\n".join(self.paragraphs)

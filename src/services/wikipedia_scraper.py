@@ -8,8 +8,12 @@ from src.services.exceptions import ParseError
 class WikipediaScraper(BaseScraper):
     """Scrapes article title and first paragraphs from Wikipedia."""
 
-    def __init__(self, lang: str = "en"):
-        super().__init__(base_url=f"https://{lang}.wikipedia.org/wiki/")
+    def __init__(self, lang: str = "en", headers: dict | None = None, timeout: int | None = None):
+        super().__init__(
+            base_url=f"https://{lang}.wikipedia.org/wiki/",
+            headers=headers,
+            timeout=timeout,
+        )
 
     def parse(self, html: str) -> Article:
         soup = BeautifulSoup(html, "lxml")  # Convierte el HTML en un árbol navegable
