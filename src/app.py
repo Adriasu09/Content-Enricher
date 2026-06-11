@@ -36,6 +36,8 @@ class App:
                 self._enrich(article)
             elif option == "2":
                 self._translate(article, language)
+            elif option == "3":
+                self._save(article)
             elif option == "0":
                 self.console.show_message("Goodbye!")
                 return
@@ -72,3 +74,21 @@ class App:
             return
         article.translated_content = translated
         self.console.render_translated(translated)
+
+    def _save(self, article) -> None:
+        version = self.console.ask_save_content()
+        content = self._content_for(article, version)
+        if not content:
+            self.console.show_message(f"There is no {version} content yet. Generate it first.")
+            return
+        export_format = self.console.ask_save_format()
+        filename = self.console.ask_filename()
+        self.console.show_message(f"Ready to save the {version} version as {filename}.{export_format}.")
+
+    def _content_for(self, article, version: str) -> str:
+        """Return the article content matching the chosen version."""
+        if version == "original":
+            return article.original_text()
+        if version == "enriched":
+            return article.enriched_content
+        return article.translated_content

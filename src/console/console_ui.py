@@ -1,4 +1,6 @@
 SUPPORTED_LANGUAGES = ["en", "es", "fr", "de", "it", "pt"]
+CONTENT_VERSIONS = ["original", "enriched", "translated"]
+EXPORT_FORMATS = ["txt", "pdf"]
 
 
 class ConsoleUI:
@@ -36,6 +38,7 @@ class ConsoleUI:
         print("\nWhat would you like to do?")
         print("[1] Enrich the content with AI")
         print("[2] Translate the content")
+        print("[3] Save the content")
         print("[0] Exit")
         return input("Choose an option: ").strip()
 
@@ -50,3 +53,27 @@ class ConsoleUI:
         print("\n✨ Translated content")
         print("-" * 40)
         print(translated_text)
+
+    def ask_save_content(self) -> str:
+        """Ask for a supported content version, repeating until valid."""
+        while True:
+            version = input(f"Enter the content version {CONTENT_VERSIONS}: ").strip().lower()
+            if version in CONTENT_VERSIONS:
+                return version
+            print(f"Unsupported version. Choose one of: {CONTENT_VERSIONS}")
+
+    def ask_save_format(self) -> str:
+        """Ask for a supported export format, repeating until valid."""
+        while True:
+            export_format = input(f"Enter the export format {EXPORT_FORMATS}: ").strip().lower()
+            if export_format in EXPORT_FORMATS:
+                return export_format
+            print(f"Unsupported format. Choose one of: {EXPORT_FORMATS}")
+
+    def ask_filename(self) -> str:
+        """Ask for a non-empty file name, repeating until valid."""
+        while True:
+            filename = input("Enter the name you want to save the file as: ").strip()
+            if filename:
+                return filename
+            print("The file name cannot be empty. Please try again.")
