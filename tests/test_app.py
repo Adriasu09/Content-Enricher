@@ -15,7 +15,7 @@ def test_run_re_asks_topic_when_article_not_found():
     scraper = Mock()
     scraper.fetch_html.side_effect = [ResourceNotFoundError(), "<html>"]
 
-    app = App(console=console, scraper=scraper, ai_service=Mock(), translate_service=Mock())
+    app = App(console=console, scraper=scraper, ai_service=Mock(), translate_service=Mock(), exporters=Mock())
 
     # Act
     app.run()

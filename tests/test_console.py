@@ -67,7 +67,7 @@ def test_app_flow_shows_article_and_exits():
     # Arrange
     console = FakeConsole()
     scraper = FakeScraper()
-    app = App(console=console, scraper=scraper, ai_service=MagicMock(), translate_service=MagicMock())
+    app = App(console=console, scraper=scraper, ai_service=MagicMock(), translate_service=MagicMock(), exporters=MagicMock())
 
     # Act
     app.run()

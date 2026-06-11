@@ -1,14 +1,15 @@
-from src.services.exceptions import ScraperError, AIServiceError, TranslationError, ResourceNotFoundError
+from src.services.exceptions import ScraperError, AIServiceError, TranslationError, ResourceNotFoundError, ExportError
 
 
 class App:
     """Orchestrates the flow: console <-> services."""
 
-    def __init__(self, console, scraper, ai_service, translate_service) -> None:
+    def __init__(self, console, scraper, ai_service, translate_service, exporters) -> None:
         self.console = console
         self.scraper = scraper
         self.ai_service = ai_service
         self.translate_service = translate_service
+        self.exporters = exporters
 
     def run(self) -> None:
         topic = self.console.ask_topic()
@@ -83,7 +84,16 @@ class App:
             return
         export_format = self.console.ask_save_format()
         filename = self.console.ask_filename()
-        self.console.show_message(f"Ready to save the {version} version as {filename}.{export_format}.")
+        exporter = self.exporters.get(export_format)
+        if exporter is None:
+            self.console.show_message(f"Export to {export_format} is not available yet.")
+            return
+        try:
+            path = exporter.export(content, filename)
+        except ExportError as e:
+            self.console.show_message(e.format_message())
+            return
+        self.console.show_message(f"Saved! Your file is at: {path}")
 
     def _content_for(self, article, version: str) -> str:
         """Return the article content matching the chosen version."""

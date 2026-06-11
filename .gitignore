@@ -16,3 +16,6 @@ __pycache__/
 
 # Claude Code instructions (local)
 CLAUDE.md
+
+# Generated export files
+output/

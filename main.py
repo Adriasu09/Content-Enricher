@@ -3,6 +3,7 @@ from src.console.console_ui import ConsoleUI
 from src.services.wikipedia_scraper import WikipediaScraper
 from src.services.ai_service import AIService
 from src.services.translate_service import TranslateService
+from src.services.export_service import TxtExporter
 from src.services.exceptions import AIAuthError
 from src.app import App
 
@@ -18,8 +19,9 @@ def main():
         return
 
     translate_service = TranslateService()
+    exporters = {"txt": TxtExporter()}
 
-    app = App(console=console, scraper=scraper, ai_service=ai_service, translate_service=translate_service)
+    app = App(console=console, scraper=scraper, ai_service=ai_service, translate_service=translate_service, exporters=exporters)
     app.run()
 
 

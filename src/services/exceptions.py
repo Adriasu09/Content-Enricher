@@ -64,3 +64,9 @@ class TranslationError(AppError):
 class UnsupportedLanguageError(TranslationError):
     """Raised when the target language is not supported by the translator."""
     default_message = "The target language is not supported."
+
+
+class ExportError(AppError):
+    """Base exception for all export errors."""
+    default_message = "The file could not be saved."
+    hint = "Check that the file name has no special characters like / \\ : * ?"
