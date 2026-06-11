@@ -5,6 +5,7 @@ import pytest
 
 from src.services.export_service import TxtExporter
 from src.services.exceptions import ExportError
+from src.services.pdf_exporter import PdfExporter
 
 
 def test_txt_exporter_writes_file(tmp_path):
@@ -27,3 +28,15 @@ def test_export_translates_oserror(tmp_path):
         # Act & Assert
         with pytest.raises(ExportError):
             exporter.export("Hello, file!", "article")
+
+
+def test_pdf_exporter_writes_file(tmp_path):
+    # Arrange
+    exporter = PdfExporter(output_dir=str(tmp_path))
+
+    # Act
+    path = exporter.export("Hello, PDF!", "article")
+
+    # Assert
+    assert os.path.exists(path)
+    assert os.path.getsize(path) > 0
