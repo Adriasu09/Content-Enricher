@@ -31,6 +31,19 @@ class ConsoleUI:
                 return False
             print("Please answer 'y' or 'n'.")
 
+    def ask_choice(self, prompt: str, options: list[str]) -> str:
+        """Show a numbered menu of options and return the chosen one."""
+        while True:
+            print(prompt)
+            for i, option in enumerate(options, start=1):
+                print(f"[{i}] {option}")
+            answer = input("Choose an option (number): ").strip()
+            if answer.isdigit():
+                index = int(answer)
+                if 1 <= index <= len(options):
+                    return options[index - 1]
+            print(f"Please enter a number between 1 and {len(options)}.")
+
     def render_article(self, article) -> None:
         """Display an article's title and paragraphs."""
         print(f"\n📄 {article.title}")
@@ -55,20 +68,12 @@ class ConsoleUI:
         print(translated_text)
 
     def ask_save_content(self, available: list[str]) -> str:
-        """Ask which content version to save, repeating until valid."""
-        while True:
-            version = input(f"Enter the content version {available}: ").strip().lower()
-            if version in available:
-                return version
-            print(f"Unsupported version. Choose one of: {available}")
+        """Ask which content version to save, as a numbered menu."""
+        return self.ask_choice("Which version do you want to save?", available)
 
     def ask_save_format(self) -> str:
-        """Ask for a supported export format, repeating until valid."""
-        while True:
-            export_format = input(f"Enter the export format {EXPORT_FORMATS}: ").strip().lower()
-            if export_format in EXPORT_FORMATS:
-                return export_format
-            print(f"Unsupported format. Choose one of: {EXPORT_FORMATS}")
+        """Ask for the export format, as a numbered menu."""
+        return self.ask_choice("Which format do you want?", EXPORT_FORMATS)
 
     def ask_filename(self) -> str:
         """Ask for a non-empty file name, repeating until valid."""
