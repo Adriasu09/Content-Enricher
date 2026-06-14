@@ -1,4 +1,5 @@
 SUPPORTED_LANGUAGES = ["en", "es", "fr", "de", "it", "pt"]
+EXPORT_FORMATS = ["txt", "pdf"]
 
 
 class ConsoleUI:
@@ -20,6 +21,29 @@ class ConsoleUI:
                 return language
             print(f"Unsupported language. Choose one of: {SUPPORTED_LANGUAGES}")
 
+    def ask_yes_no(self, question: str) -> bool:
+        """Ask a yes/no question, repeating until valid. Returns True for yes."""
+        while True:
+            answer = input(f"{question} (y/n): ").strip().lower()
+            if answer in ("y", "yes"):
+                return True
+            if answer in ("n", "no"):
+                return False
+            print("Please answer 'y' or 'n'.")
+
+    def ask_choice(self, prompt: str, options: list[str]) -> str:
+        """Show a numbered menu of options and return the chosen one."""
+        while True:
+            print(prompt)
+            for i, option in enumerate(options, start=1):
+                print(f"[{i}] {option}")
+            answer = input("Choose an option (number): ").strip()
+            if answer.isdigit():
+                index = int(answer)
+                if 1 <= index <= len(options):
+                    return options[index - 1]
+            print(f"Please enter a number between 1 and {len(options)}.")
+
     def render_article(self, article) -> None:
         """Display an article's title and paragraphs."""
         print(f"\n📄 {article.title}")
@@ -30,14 +54,6 @@ class ConsoleUI:
     def show_message(self, message: str) -> None:
         """Display a simple message to the user."""
         print(message)
-
-    def ask_menu_option(self) -> str:
-        """Show the action menu and return the chosen option."""
-        print("\nWhat would you like to do?")
-        print("[1] Enrich the content with AI")
-        print("[2] Translate the content")
-        print("[0] Exit")
-        return input("Choose an option: ").strip()
 
     def render_enriched(self, enriched_text: str) -> None:
         """Display the AI-enriched content."""
@@ -50,3 +66,19 @@ class ConsoleUI:
         print("\n✨ Translated content")
         print("-" * 40)
         print(translated_text)
+
+    def ask_save_content(self, available: list[str]) -> str:
+        """Ask which content version to save, as a numbered menu."""
+        return self.ask_choice("Which version do you want to save?", available)
+
+    def ask_save_format(self) -> str:
+        """Ask for the export format, as a numbered menu."""
+        return self.ask_choice("Which format do you want?", EXPORT_FORMATS)
+
+    def ask_filename(self) -> str:
+        """Ask for a non-empty file name, repeating until valid."""
+        while True:
+            filename = input("Enter the name you want to save the file as: ").strip()
+            if filename:
+                return filename
+            print("The file name cannot be empty. Please try again.")

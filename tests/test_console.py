@@ -33,7 +33,6 @@ class FakeConsole:
 
     def __init__(self):
         self.shown_article = None
-        self.menu_calls = 0
 
     def ask_topic(self):
         return "Python"
@@ -47,10 +46,8 @@ class FakeConsole:
     def show_message(self, message):
         pass
 
-    def ask_menu_option(self):
-        # First call: choose exit, to leave the menu loop immediately
-        self.menu_calls += 1
-        return "0"
+    def ask_yes_no(self, question):
+        return False
 
 
 class FakeScraper:
@@ -67,7 +64,7 @@ def test_app_flow_shows_article_and_exits():
     # Arrange
     console = FakeConsole()
     scraper = FakeScraper()
-    app = App(console=console, scraper=scraper, ai_service=MagicMock(), translate_service=MagicMock())
+    app = App(console=console, scraper=scraper, ai_service=MagicMock(), translate_service=MagicMock(), exporters=MagicMock())
 
     # Act
     app.run()

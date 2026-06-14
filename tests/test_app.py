@@ -9,13 +9,13 @@ def test_run_re_asks_topic_when_article_not_found():
     console = Mock()
     console.ask_topic.side_effect = ["Pythn", "Python"]
     console.ask_language.return_value = "es"
-    console.ask_menu_option.return_value = "0"
+    console.ask_yes_no.return_value = False
 
     # Arrange: el scraper falla al primer intento y funciona al segundo
     scraper = Mock()
     scraper.fetch_html.side_effect = [ResourceNotFoundError(), "<html>"]
 
-    app = App(console=console, scraper=scraper, ai_service=Mock(), translate_service=Mock())
+    app = App(console=console, scraper=scraper, ai_service=Mock(), translate_service=Mock(), exporters=Mock())
 
     # Act
     app.run()
