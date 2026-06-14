@@ -19,3 +19,6 @@ CLAUDE.md
 
 # Generated export files
 output/
+
+# Coverage reports
+.coverage
