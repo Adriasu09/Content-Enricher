@@ -1,5 +1,4 @@
 SUPPORTED_LANGUAGES = ["en", "es", "fr", "de", "it", "pt"]
-CONTENT_VERSIONS = ["original", "enriched", "translated"]
 EXPORT_FORMATS = ["txt", "pdf"]
 
 
@@ -22,6 +21,16 @@ class ConsoleUI:
                 return language
             print(f"Unsupported language. Choose one of: {SUPPORTED_LANGUAGES}")
 
+    def ask_yes_no(self, question: str) -> bool:
+        """Ask a yes/no question, repeating until valid. Returns True for yes."""
+        while True:
+            answer = input(f"{question} (y/n): ").strip().lower()
+            if answer in ("y", "yes"):
+                return True
+            if answer in ("n", "no"):
+                return False
+            print("Please answer 'y' or 'n'.")
+
     def render_article(self, article) -> None:
         """Display an article's title and paragraphs."""
         print(f"\n📄 {article.title}")
@@ -32,15 +41,6 @@ class ConsoleUI:
     def show_message(self, message: str) -> None:
         """Display a simple message to the user."""
         print(message)
-
-    def ask_menu_option(self) -> str:
-        """Show the action menu and return the chosen option."""
-        print("\nWhat would you like to do?")
-        print("[1] Enrich the content with AI")
-        print("[2] Translate the content")
-        print("[3] Save the content")
-        print("[0] Exit")
-        return input("Choose an option: ").strip()
 
     def render_enriched(self, enriched_text: str) -> None:
         """Display the AI-enriched content."""
@@ -54,13 +54,13 @@ class ConsoleUI:
         print("-" * 40)
         print(translated_text)
 
-    def ask_save_content(self) -> str:
-        """Ask for a supported content version, repeating until valid."""
+    def ask_save_content(self, available: list[str]) -> str:
+        """Ask which content version to save, repeating until valid."""
         while True:
-            version = input(f"Enter the content version {CONTENT_VERSIONS}: ").strip().lower()
-            if version in CONTENT_VERSIONS:
+            version = input(f"Enter the content version {available}: ").strip().lower()
+            if version in available:
                 return version
-            print(f"Unsupported version. Choose one of: {CONTENT_VERSIONS}")
+            print(f"Unsupported version. Choose one of: {available}")
 
     def ask_save_format(self) -> str:
         """Ask for a supported export format, repeating until valid."""

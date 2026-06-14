@@ -28,27 +28,17 @@ class App:
                 return
 
         self.console.render_article(article)
-        self._menu_loop(article, language)
 
-    def _menu_loop(self, article, language) -> None:
-        while True:
-            option = self.console.ask_menu_option()
-            if option == "1":
-                self._enrich(article)
-            elif option == "2":
-                self._translate(article, language)
-            elif option == "3":
-                self._save(article)
-            elif option == "0":
-                self.console.show_message("Goodbye!")
-                return
-            else:
-                self.console.show_message("Invalid option. Please try again.")
+        if self.console.ask_yes_no("Do you want to enrich the content with AI?"):
+            self._enrich(article)
+
+        if self.console.ask_yes_no("Do you want to translate the content?"):
+            self._translate(article, language)
+
+        if self.console.ask_yes_no("Do you want to save the content to a file?"):
+            self._save(article)
 
     def _enrich(self, article) -> None:
-        if article.enriched_content:
-            self.console.show_message("Content is already enriched.")
-            return
         self.console.show_message("Enriching content, please wait...")
         original_text = article.original_text()
         try:
@@ -60,9 +50,6 @@ class App:
         self.console.render_enriched(enriched)
 
     def _translate(self, article, language) -> None:
-        if article.translated_content:
-            self.console.show_message("Content is already translated.")
-            return
         self.console.show_message("Translating content, please wait...")
         text = article.original_text()
         if article.enriched_content:
@@ -77,17 +64,12 @@ class App:
         self.console.render_translated(translated)
 
     def _save(self, article) -> None:
-        version = self.console.ask_save_content()
+        available = self._available_versions(article)
+        version = self.console.ask_save_content(available)
         content = self._content_for(article, version)
-        if not content:
-            self.console.show_message(f"There is no {version} content yet. Generate it first.")
-            return
         export_format = self.console.ask_save_format()
         filename = self.console.ask_filename()
         exporter = self.exporters.get(export_format)
-        if exporter is None:
-            self.console.show_message(f"Export to {export_format} is not available yet.")
-            return
         try:
             path = exporter.export(content, filename)
         except ExportError as e:
@@ -102,3 +84,12 @@ class App:
         if version == "enriched":
             return article.enriched_content
         return article.translated_content
+
+    def _available_versions(self, article) -> list[str]:
+        """Return the versions that currently have content."""
+        versions = ["original"]
+        if article.enriched_content:
+            versions.append("enriched")
+        if article.translated_content:
+            versions.append("translated")
+        return versions
