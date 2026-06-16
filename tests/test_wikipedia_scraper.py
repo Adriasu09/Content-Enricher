@@ -8,7 +8,7 @@ from src.services.exceptions import ResourceNotFoundError, ScraperConnectionErro
 SAMPLE_HTML = """
 <html>
   <h1 id="firstHeading">Python</h1>
-  <div class="mw-parser-output">
+  <div id="mw-content-text">
     <p>Primer párrafo real.</p>
     <p></p>
     <p>Segundo párrafo real.</p>
@@ -45,7 +45,7 @@ def test_parse_with_no_valid_paragraphs():
     empty_html = """
     <html>
       <h1 id="firstHeading">Vacío</h1>
-      <div class="mw-parser-output">
+      <div id="mw-content-text">
         <p></p>
         <p>   </p>
       </div>
@@ -66,7 +66,7 @@ def test_parse_with_fewer_than_five_paragraphs():
     short_html = """
     <html>
       <h1 id="firstHeading">Short Article</h1>
-      <div class="mw-parser-output">
+      <div id="mw-content-text">
         <p>First paragraph.</p>
         <p>Second paragraph.</p>
         <p>Third paragraph.</p>
