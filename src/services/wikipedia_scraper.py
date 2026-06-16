@@ -27,7 +27,7 @@ class WikipediaScraper(BaseScraper):
             raise ParseError("Could not find the article title in the page.")
         title = heading.get_text()
 
-        content = soup.find("div", class_="mw-parser-output")
+        content = soup.find("div", id="mw-content-text")
         if content is None:
             raise ParseError("Could not find the article content in the page.")
         all_paragraphs = content.find_all("p")
